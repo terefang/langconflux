@@ -33,6 +33,7 @@ package terefang.conflux;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.util.Collection;
@@ -148,7 +149,7 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 
 	public void load(File fn, int ts) throws IOException
 	{
-		FileInputStream fin = new FileInputStream(fn);
+		FileReader fin = new FileReader(fn);
 		StreamTokenizer st = new StreamTokenizer(fin);
 		load(st, ts);
 		fin.close();
@@ -191,6 +192,7 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 		{
 			if(tokenType == StreamTokenizer.TT_WORD)
 			{
+				if(debug) System.out.println("S = "+st.sval);
 				String buf = st.sval;
 				for(int j=1; j<=ts && j<buf.length(); j++)
 				{
@@ -305,10 +307,6 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 					itr=0;
 					word.setLength(0);
 				}
-				else if(allowSpecialChars)
-				{
-					word.append('-');
-				}
 				word.append(this.getStartChar());
 			}
 			else
@@ -345,7 +343,7 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 		
 		for(String key : k)
 		{
-			System.out.println("'"+key+"' = "+this.get(key));
+			System.out.println("\""+key+"\" = "+this.get(key));
 		}
 	}
 
@@ -353,11 +351,13 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 	{
 		Conflux cf = new Conflux();
 		cf.setRestrictedMode(true);
-		cf.load(new File("./src/test/resources/test.txt"), 3);
 		cf.setSeed(1);
-		cf.setDebug(false);
+		//cf.setDebug(true);
 		cf.setLoopBreaker(1000);
 		cf.setFudge(0);
+		cf.setAllowExtendedChars(true);
+		cf.setAllowSpecialChars(true);
+		cf.load(new File("./src/test/resources/test.txt"), 2);
 		
 		Vector<String> w = new Vector();
 		for(int i=5; i<9; i++)
@@ -384,7 +384,7 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 		{
 			System.out.println(w.elementAt(i));
 		}
-		//cf.printTable();
+		cf.printTable();
 	}
 
 }
