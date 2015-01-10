@@ -49,7 +49,6 @@ import java.util.Vector;
 public class Conflux extends Hashtable<String,Collection<Character>>
 {
 
-
 	Random rand = new Random(System.currentTimeMillis());
 	int tableSize = 0;
 
@@ -57,7 +56,29 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 	boolean debug = false;
 	int loopBreaker = 1000;
 	int fudge = 3;
-	
+	boolean allowSpecialChars = false;
+	boolean allowExtendedChars = false;
+
+	public boolean isAllowSpecialChars() 
+	{
+		return allowSpecialChars;
+	}
+
+	public void setAllowSpecialChars(boolean allowSpecialChars) 
+	{
+		this.allowSpecialChars = allowSpecialChars;
+	}
+
+	public boolean isAllowExtendedChars() 
+	{
+		return allowExtendedChars;
+	}
+
+	public void setAllowExtendedChars(boolean allowExtendedChars) 
+	{
+		this.allowExtendedChars = allowExtendedChars;
+	}
+
 	public int getFudge() 
 	{
 		return fudge;
@@ -153,6 +174,18 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 		st.lowerCaseMode(true);
 		st.wordChars('A', 'Z');
 		st.wordChars('a', 'z');
+		
+		if(allowSpecialChars)
+		{
+			st.wordChars('\'', '\'');
+			st.wordChars('`', '`');
+			st.wordChars('-', '-');
+		}
+		
+		if(allowExtendedChars)
+		{
+			st.wordChars(0x7e, 0xffff);
+		}
 		
 		while((tokenType = st.nextToken()) !=  StreamTokenizer.TT_EOF)
 		{
@@ -268,11 +301,30 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 			{
 				if(word.length()>=size && !w.contains(word.toString()))
 				{
-				w.add(word.toString());
-				itr=0;
+					w.add(word.toString());
+					itr=0;
+					word.setLength(0);
 				}
-				word.setLength(0);
+				else if(allowSpecialChars)
+				{
+					word.append('-');
+				}
 				word.append(this.getStartChar());
+			}
+			else
+			if(c=='\'' || c=='-' || c=='`')
+			{
+				if(word.length()>=size && !w.contains(word.toString()))
+				{
+					w.add(word.toString());
+					itr=0;
+					word.setLength(0);
+					word.append(this.getStartChar());
+				}
+				else
+				{
+					word.append(c);
+				}
 			}
 			else
 			{
@@ -308,11 +360,11 @@ public class Conflux extends Hashtable<String,Collection<Character>>
 		cf.setFudge(0);
 		
 		Vector<String> w = new Vector();
-		for(int i=3; i<4; i++)
+		for(int i=5; i<9; i++)
 		{
 			try 
 			{
-				cf.generateWords(w, i, w.size()+100);
+				cf.generateWords(w, i, w.size()+10);
 			} 
 			catch (Exception xe) 
 			{

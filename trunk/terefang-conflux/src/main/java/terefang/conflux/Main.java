@@ -56,6 +56,8 @@ public class Main {
 			System.out.println("\t-b\t<n>\tloop breaker (def=100)");
 			System.out.println("\t-f\t<n>\tfudge chars (def=3)");
 			System.out.println("\t-r\t\tuse restricted mode (faster)");
+			System.out.println("\t-E\t\tallow extended chars (0x7e-0xffff)");
+			System.out.println("\t-X\t\tallow special chars (', -, `)");
 			System.exit(1);
 		}
 		
@@ -100,6 +102,12 @@ public class Main {
 				break;
 			case 'r':
 				cf.setRestrictedMode(true);
+				break;
+			case 'E':
+				cf.setAllowExtendedChars(true);
+				break;
+			case 'X':
+				cf.setAllowSpecialChars(true);
 				break;
 			case 'b':
 				arg = g.getOptarg();
