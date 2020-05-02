@@ -28,13 +28,14 @@
  *
  ***********************************************************************************/
 
-package terefang.conflux;
+package com.github.terefang.conflux;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import com.github.terefang.conflux.Conflux;
 import gnu.getopt.Getopt;
 
 public class Main {

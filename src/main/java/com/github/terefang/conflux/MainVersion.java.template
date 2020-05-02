@@ -1,0 +1,6 @@
+package com.github.terefang.conflux;
+
+public class MainVersion
+{
+    public static final String VERSION = "@version@-@build@";
+}

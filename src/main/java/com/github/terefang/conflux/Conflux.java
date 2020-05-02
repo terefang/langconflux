@@ -28,7 +28,7 @@
  *
  ***********************************************************************************/
 
-package terefang.conflux;
+package com.github.terefang.conflux;
 
 import java.io.File;
 import java.io.FileInputStream;
